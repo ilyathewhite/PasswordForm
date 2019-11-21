@@ -347,7 +347,7 @@ public func updates<Value: Comparable>(on keyPath: KeyPath<State, Value>)
 }
 ```
 
-To connect multiple views, we often need to bind updates from a property of another view's store to an action for the first store:
+To connect multiple views, we often need to bind updates from a property of another view's store to an action for the first store. We can express this as an effect:
 ```Swift
 public func bind<OtherState, OtherValue, OtherMutatingAction, OtherEffectAction>(
     to otherStore: StateStore<OtherState, OtherMutatingAction, OtherEffectAction>,
