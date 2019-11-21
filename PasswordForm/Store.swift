@@ -80,7 +80,7 @@ public class StateStore<State, MutatingAction, EffectAction>: ObservableObject {
         }
 
         if let e = effect {
-            effects.send(e)
+            addEffect(e)
         }
     }
 

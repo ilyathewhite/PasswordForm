@@ -57,7 +57,7 @@ enum SignUp {
         case tooShort
         case valid
 
-        var maessage: String {
+        var message: String {
             switch self {
             case .passwordEmpty: return "Password must not be empty"
             case .differentPasswords: return "Passwords don't match"
@@ -114,7 +114,7 @@ extension SignUp {
                 state.passwordMessage = ""
             }
             else {
-                state.passwordMessage = state.passwordValidationState.maessage
+                state.passwordMessage = state.passwordValidationState.message
             }
 
         case .showSignUpUI:
