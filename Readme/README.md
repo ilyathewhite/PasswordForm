@@ -209,15 +209,33 @@ static func validatePassword(_ password: String, _ passwordAgain: String) -> Pas
 }
 ```
 
-This code is easy to follow, it's synchronous, and it's easy to test. It captures all of the requirements,  except those that are about timing. For that, we need the code that says when to send the actions. The most interesting part there is "when the user stops typing", which is the same for all text fields. Every change in a text field must be connected to the store via a binding. The state in the store is read only (it can be modified only through actions), so we can't use SwiftUI built-in two way bindings. Instead, the store has a generic way to bind text changes to actions:
+The next step is to connect the state to the UI. To connect the text fields, we need to use bindings. The state in the store is read only (it can be modified only through actions), so we can't use SwiftUI built-in two way bindings. Instead, the store has a generic way to bind text changes to actions:
 ```Swift
 TextField(
     SignUp.usernameLabel,
     text: store.binding(\.username, { .updateUsername($0) })
 )
 ```
+next, the error messages:
+```Swift
+Section(footer: errorText(store.state.usernameMessage))
+```
+where `errorText` is
+```Swift
+func errorText(_ content: String) -> Text {
+    Text(content).foregroundColor(.red)
+}
+```
+and finally the sign up button:
+```Swift
+Button(
+    SignUp.signUpLabel,
+    action: { self.store.send(.mutating(.showSignUpUI)) }
+)
+.disabled(!store.state.canSignUp)
+```
 
-The code above shows how the state gets every text change in the UI. Here is how we can express that the user paused typing:
+The code captures all of the requirements, except those that are about timing. For that, we need the code that says when to send the actions. Here is how we can express that the user paused typing:
 ```Swift
 static func pausedTyping(_ store: Store, keyPath: KeyPath<State, String>, action: MutatingAction) 
 -> Reducer.Effect {
@@ -230,8 +248,7 @@ static func pausedTyping(_ store: Store, keyPath: KeyPath<State, String>, action
         .eraseToAnyPublisher()
 }
 ```
-
-It describes how to make a data transformation chain. Here is how we use this for all text fields. When we make the store, we add 3 effects that keep running while the form is there:
+It describes how to make a data transformation chain. To use this for all text fields, when we make the store, we add 3 effects that keep running while the form is there:
 ```Swift
 static func store() -> SignUp.Store {
     let store = Store(State(), reducer: reducer)
@@ -240,15 +257,6 @@ static func store() -> SignUp.Store {
     store.addEffect(pausedTyping(store, keyPath: \.passwordAgain, action: .updatePasswordMessage))
     return store
 }
-```
-
-The last step is to connect the sign up button:
-```Swift
-Button(
-    SignUp.signUpLabel,
-    action: { self.store.send(.mutating(.showSignUpUI)) }
-)
-.disabled(!store.state.canSignUp)
 ```
 
 Most of the code snippets describe static functions that don't have any state and instead describe data transformations, which makes them easy to follow and easy to test. The only code that isn't easily testable is the code that tells when to send actions, but it's very simple and is either tied directly to SwiftUI and Combine or uses the architecture helper methods that don't need tests in every app.
