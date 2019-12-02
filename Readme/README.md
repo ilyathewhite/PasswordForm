@@ -24,6 +24,17 @@ Another important difference from UIKit, is that in SwiftUI a view is conceptual
 
 WWDC showed a few examples of this style where a password form login button was enabled or disabled based on the result of combining data streams from user input. While these data transformation chains are very elegant, this style isn't scalable because the transformation chains can be easily entangled so that code changes in one chain may unexpectedly affect other chains. Additionally, this style doesn't provide an easy way to see what happens to the model over time. It is possible to set a breakpoint on the body property of a SwiftUI view and dump all the variables there, but that doesn't show what triggers the change in the state and so isn't that useful for debugging. Testing is also problematic: it is possible to test one data transformation chain, but testing the changes to the model as a whole is nearly impossible.
 
+### Example
+
+We will look at a similar example:
+<p align="center">
+  <img src="PasswordForm.png">
+</p>
+
+Initially, the form should be empty. After the user pauses typing, if the username is invalid, the UI should show a red message below the username. Similarly, when the user types in the password, there should be no red message below, but if the password is invalid when the user pauses typing, the message should tell that the password is invalid. If the user types in the password again and they don't match, the user should see this after pausing typing the second password but not before pausing. If the user enters different passwords and the first password is invalid, after pausing typing, the user should see the message about the invalid password, not different passwords. As soon as the user starts typing again, the relevant messages should disappear. Finally, Sign Up should be enabled exactly when the username is valid, the password is valid, and the second password is the same. This should be independent of typing so that the user cannot possibly tap on Sign Up with invalid data.
+
+That is a lot of conditions and a lot of state to keep track of! Doing all of this with stream transformations is possible but not easy. Instead, we'll look at a different architecture that is similar to MVC and is much easier to follow and test.
+
 ### The Reducer
 
 The pattern that MVC naturally transforms into with SwiftUI is very similar to the reducer architecture. It has many variants (just like MVC), but the main idea is that there is a model, often called state, and a function, the reducer, that takes the state and an action and transforms (reduces) the state based on the action.
@@ -31,12 +42,78 @@ The pattern that MVC naturally transforms into with SwiftUI is very similar to t
   <img src="BasicReducer.png">
 </p>
 
-There is some similarity to OOP in that only  the reducer changes the state, and that there is a  predefined list of actions. One crucial difference is that the reducer is a pure function – it uses only the state and the action to derive the new state and does not change anything except updating the state (or returning a new one). Another difference, almost as important as the first, is that an object defines the actions as public methods while the reducer unifies actions under one type, which makes it possible to separate actions from its object and compose them into a sequence of actions (or a Publisher, using Combine terminology). It also makes testing much easier because actions can be saved and replayed when testing, while the state can be compared to the expected state after each action.
+In our example, the state could be
+```Swift
+struct State {
+    var username = ""
+    var usernameMessage = ""
+    var password = ""
+    var passwordMessage = ""
+    var passwordAgain = ""
+    var canSignUp = false
+    ...
+}
+```
+The action could be
+```Swift
+enum Action {
+    case updateUsername(String)
+    case updatePassword(String)
+    case updatePasswordAgain(String)
+    case updateUsernameMessage
+    case updatePasswordMessage
+    case showSignUpUI
+    case hideSignUpUI
+}
+```
+and the reducer could be
+```Swift
+func reducer(state: inout State, action: Action) {
+   ...
+}
+```
+
+There is some similarity to OOP in that only the reducer changes the state, and that there is a predefined list of actions:
+```Swift
+class State {
+    private(set) var username = ""
+    private(set) var usernameMessage = ""
+    private(set) var password = ""
+    private(set) var passwordMessage = ""
+    private(set) var passwordAgain = ""
+    private(set) var canSignUp = false
+
+    func updateUsername(_ username: String) { ... }
+    func updatePassword(_ password: String) { ... }
+    func updatePasswordAgain(_ password: String) { ... }
+    func updateUsernameMessage() { ... }
+    func updatePasswordMessage() { ... }
+    func showSignUpUI() { ... }
+    func hideSignUpUI() { ... }
+}
+```
+
+One crucial difference is that the reducer is a pure function – it uses only the state and the action to derive the new state and does not change anything except updating the state (or returning a new one). Another difference, almost as important as the first, is that an object defines the actions as public methods while the reducer unifies actions under one type, which makes it possible to separate actions from its object and compose them into a sequence of actions (or a Publisher, using Combine terminology). It also makes testing much easier because actions can be saved and replayed when testing, while the state can be compared to the expected state after each action.
 
 The state, reducer, and a sequence of actions also provide a way to see how the state changes over time, and since a SwiftUI view is always a reflection of the state, the UI always updates in a predictable way.
 <p align="center">
   <img src="ActionStreams.png">
 </p>
+
+In our example, the sequence of actions could be
+```Swift
+[
+   .updateUsername("i", 
+   .updateUsername("il",
+   .updateUsername("ily",
+   .updateUsername("ilya",
+   .updatePassword("t"),
+   .updatePassword("te"),
+   .updatePassword("tes"),
+   .updatePassword("test")
+ ]
+```
+and the view would update with the new text after every action.
 
 A class can be written to resemble this pattern, but a struct for the state and an enum for actions provide much more compiler help to enforce it.
 
@@ -44,10 +121,14 @@ A class can be written to resemble this pattern, but a struct for the state and 
 
 In addition to updating the state, the reducer also needs a way to describe side effects – code that does something other than synchronously changing the state (synchronous state change must happen in the reducer).  Some examples:  a network request, logging,  writing data to disk. If the state needs to be updated as a result of running a side effect (for example an update from the network response), it's achieved by sending an action to the reducer. This creates a unidirectional data flow where the reducer is the only part of the code that changes the state.
 
-One way to describe this asynchronous work is to use Future<Action>. This would describe one asynchronous action. A more general approach that describes multiple asynchronous actions is to use [Future<Action>], but the most general way is to use a Publisher for actions. This is more general than an array (an array can be easily converted to a publisher) and describes any possible asynchronous work that might even repeat forever at random times. An example: user input whenever the user stops typing.
+In our example, a side effect could be an action to indicate that the user has stopped or paused typing.
+
+One way to describe this asynchronous work is to use Future<Action>. This would describe one asynchronous action. A more general approach that describes multiple asynchronous actions is to use [Future<Action>], but the most general way is to use a Publisher for actions. This is more general than an array (an array can be easily converted to a publisher) and describes any possible asynchronous work that might even repeat forever at random times.
 <p align="center">
   <img src="SideEffects.png">
 </p>
+  
+In our example, the side effect of paused typing can be described when constructing the UI and would repeat at random times while the form is active.
 
 ### The Store
 
@@ -68,18 +149,9 @@ A third problem is the amount of boilerplate code. A global state must provide t
 
 An alternative approach is to treat changes in the child view as side effects. The parent store can subscribe to receive actions from the child store, treating the child store updates as an effect. This provides the most flexibility (the stream of actions from the child store can be easily transformed as any other stream, for example by grouping multiple updates into one, or by getting the updates only when some conditions are met, etc). It also taps into the existing mechanism for delivering actions, which minimizes the amount of boilerplate code. Additionally, it's much more efficient since this communication is only between the parts of the UI that needs to be updated, and the updates are triggered only as necessary. It's a difference between O(1) and O(N) where N is the number of nodes in the view hierarchy.
 
-## Example
+## The Complete Example
 
-To see this architecture in practice, let's look at an example of a sign up form:
-<p align="center">
-  <img src="PasswordForm.png">
-</p>
-
-Initially, the form should be empty. After the user pauses typing, if the username is invalid, the UI should show a red message below the username. Similarly, when the user types in the password, there should be no red message below, but if the password is invalid when the user pauses typing, the message should tell that the password is invalid. If the user types in the password again and they don't match, the user should see this after pausing typing the second password but not before pausing. If the user enters different passwords and the first password is invalid, after pausing typing, the user should see the message about the invalid password, not different passwords. As soon as the user starts typing again, the relevant messages should disappear. Finally, Sign Up should be enabled exactly when the username is valid, the password is valid, and the second password is the same. This should be independent of typing so that the user cannot possibly tap on Sign Up with invalid data.
-
-That is a lot of conditions and a lot of state to keep track of! Doing all of this with stream transformations would be tricky. Here is how this can be done with the reducer architecture.
-
-First, let's define the state for this form:
+Here is how our example can be implemented with this architecture. First, let's define the state for this form:
 ```Swift
 struct State {
     var username = ""
