@@ -24,7 +24,7 @@ public struct StateReducer<Value, MutatingAction, EffectAction> {
     let run: (inout Value, MutatingAction) -> Effect?
     let effect: (Value, EffectAction) -> Effect
 
-    static func effect(_ body: @escaping () -> Action) -> Effect {
+    public static func effect(_ body: @escaping () -> Action) -> Effect {
         Effect(
             Deferred {
                 Future { promise in
@@ -36,7 +36,7 @@ public struct StateReducer<Value, MutatingAction, EffectAction> {
 }
 
 extension StateReducer where EffectAction == Never {
-    init(_ run: @escaping (inout Value, MutatingAction) -> Effect?) {
+    public init(_ run: @escaping (inout Value, MutatingAction) -> Effect?) {
         self = StateReducer(run: run, effect: { _, effectAction in AnyPublisher(Just(.effect(effectAction))) })
     }
 }
@@ -62,7 +62,7 @@ public class StateStore<State, MutatingAction, EffectAction>: ObservableObject {
         )
     }
 
-    func addEffect(_ effect: Reducer.Effect) {
+    public func addEffect(_ effect: Reducer.Effect) {
         effects.send(effect)
     }
 
@@ -117,7 +117,7 @@ public class StateStore<State, MutatingAction, EffectAction>: ObservableObject {
         bind(to: otherStore, on: keyPath, with: action, compare: ==)
     }
 
-    func binding<Value>(_ keyPath: KeyPath<State, Value>, _ action: @escaping (Value) -> MutatingAction) -> Binding<Value> {
+    public func binding<Value>(_ keyPath: KeyPath<State, Value>, _ action: @escaping (Value) -> MutatingAction) -> Binding<Value> {
         return Binding(get: { self.state[keyPath: keyPath] }, set: { self.send(.mutating(action($0))) })
     }
 }

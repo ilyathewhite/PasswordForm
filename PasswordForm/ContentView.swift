@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ReducerArchitecture
 
 enum SignUp {
     typealias Store = StateStore<State, MutatingAction, Never>

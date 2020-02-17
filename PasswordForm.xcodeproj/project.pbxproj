@@ -3,20 +3,21 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		091D4B9023FB389300448346 /* ReducerArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 091D4B8F23FB389300448346 /* ReducerArchitecture */; };
 		095EC31B2379E95900EF907A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EC31A2379E95900EF907A /* AppDelegate.swift */; };
 		095EC31D2379E95900EF907A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EC31C2379E95900EF907A /* SceneDelegate.swift */; };
 		095EC31F2379E95900EF907A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EC31E2379E95900EF907A /* ContentView.swift */; };
 		095EC3212379E95A00EF907A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 095EC3202379E95A00EF907A /* Assets.xcassets */; };
 		095EC3242379E95A00EF907A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 095EC3232379E95A00EF907A /* Preview Assets.xcassets */; };
 		095EC3272379E95A00EF907A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 095EC3252379E95A00EF907A /* LaunchScreen.storyboard */; };
-		095EC32F2379EAF800EF907A /* ReducerArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EC32E2379EAF800EF907A /* ReducerArchitecture.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		091D4B8B23FB280400448346 /* ReducerArchitecture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ReducerArchitecture; path = PasswordForm/ReducerArchitecture; sourceTree = "<group>"; };
 		095EC3172379E95900EF907A /* PasswordForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		095EC31A2379E95900EF907A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		095EC31C2379E95900EF907A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -25,7 +26,6 @@
 		095EC3232379E95A00EF907A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		095EC3262379E95A00EF907A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		095EC3282379E95A00EF907A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		095EC32E2379EAF800EF907A /* ReducerArchitecture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReducerArchitecture.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,26 +33,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				091D4B9023FB389300448346 /* ReducerArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		091D4B8923FB269B00448346 /* ReducerArchitecture */ = {
+		091D4B8C23FB371C00448346 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				095EC32E2379EAF800EF907A /* ReducerArchitecture.swift */,
 			);
-			path = ReducerArchitecture;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		095EC30E2379E95900EF907A = {
 			isa = PBXGroup;
 			children = (
-				091D4B8923FB269B00448346 /* ReducerArchitecture */,
+				091D4B8B23FB280400448346 /* ReducerArchitecture */,
 				095EC3192379E95900EF907A /* PasswordForm */,
 				095EC3182379E95900EF907A /* Products */,
+				091D4B8C23FB371C00448346 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -102,6 +103,9 @@
 			dependencies = (
 			);
 			name = PasswordForm;
+			packageProductDependencies = (
+				091D4B8F23FB389300448346 /* ReducerArchitecture */,
+			);
 			productName = PasswordForm;
 			productReference = 095EC3172379E95900EF907A /* PasswordForm.app */;
 			productType = "com.apple.product-type.application";
@@ -160,7 +164,6 @@
 				095EC31B2379E95900EF907A /* AppDelegate.swift in Sources */,
 				095EC31D2379E95900EF907A /* SceneDelegate.swift in Sources */,
 				095EC31F2379E95900EF907A /* ContentView.swift in Sources */,
-				095EC32F2379EAF800EF907A /* ReducerArchitecture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +357,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		091D4B8F23FB389300448346 /* ReducerArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ReducerArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 095EC30F2379E95900EF907A /* Project object */;
 }
