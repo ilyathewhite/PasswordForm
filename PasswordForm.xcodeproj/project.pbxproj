@@ -7,17 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		091D4B9023FB389300448346 /* ReducerArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 091D4B8F23FB389300448346 /* ReducerArchitecture */; };
 		095EC31B2379E95900EF907A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EC31A2379E95900EF907A /* AppDelegate.swift */; };
 		095EC31D2379E95900EF907A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EC31C2379E95900EF907A /* SceneDelegate.swift */; };
 		095EC31F2379E95900EF907A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EC31E2379E95900EF907A /* ContentView.swift */; };
 		095EC3212379E95A00EF907A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 095EC3202379E95A00EF907A /* Assets.xcassets */; };
 		095EC3242379E95A00EF907A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 095EC3232379E95A00EF907A /* Preview Assets.xcassets */; };
 		095EC3272379E95A00EF907A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 095EC3252379E95A00EF907A /* LaunchScreen.storyboard */; };
+		0970072D23FB42EC00C213EE /* ReducerArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 0970072C23FB42EC00C213EE /* ReducerArchitecture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		091D4B8B23FB280400448346 /* ReducerArchitecture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ReducerArchitecture; path = PasswordForm/ReducerArchitecture; sourceTree = "<group>"; };
 		095EC3172379E95900EF907A /* PasswordForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		095EC31A2379E95900EF907A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		095EC31C2379E95900EF907A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -33,7 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				091D4B9023FB389300448346 /* ReducerArchitecture in Frameworks */,
+				0970072D23FB42EC00C213EE /* ReducerArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,7 +49,6 @@
 		095EC30E2379E95900EF907A = {
 			isa = PBXGroup;
 			children = (
-				091D4B8B23FB280400448346 /* ReducerArchitecture */,
 				095EC3192379E95900EF907A /* PasswordForm */,
 				095EC3182379E95900EF907A /* Products */,
 				091D4B8C23FB371C00448346 /* Frameworks */,
@@ -104,7 +102,7 @@
 			);
 			name = PasswordForm;
 			packageProductDependencies = (
-				091D4B8F23FB389300448346 /* ReducerArchitecture */,
+				0970072C23FB42EC00C213EE /* ReducerArchitecture */,
 			);
 			productName = PasswordForm;
 			productReference = 095EC3172379E95900EF907A /* PasswordForm.app */;
@@ -134,6 +132,9 @@
 				Base,
 			);
 			mainGroup = 095EC30E2379E95900EF907A;
+			packageReferences = (
+				0970072B23FB42EC00C213EE /* XCRemoteSwiftPackageReference "ReducerArchitecture" */,
+			);
 			productRefGroup = 095EC3182379E95900EF907A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -358,9 +359,21 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		0970072B23FB42EC00C213EE /* XCRemoteSwiftPackageReference "ReducerArchitecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RocketLaunchpad/ReducerArchitecture.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		091D4B8F23FB389300448346 /* ReducerArchitecture */ = {
+		0970072C23FB42EC00C213EE /* ReducerArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 0970072B23FB42EC00C213EE /* XCRemoteSwiftPackageReference "ReducerArchitecture" */;
 			productName = ReducerArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ReducerArchitecture",
+        "repositoryURL": "https://github.com/RocketLaunchpad/ReducerArchitecture.git",
+        "state": {
+          "branch": null,
+          "revision": "0c5d319e42e7c4f8648042f43ccab24369dc20c2",
+          "version": "0.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
