@@ -1,12 +1,10 @@
 //
-//  Store.swift
-//  PrimeTimeAlt
+//  ReducerArchitecture.swift
 //
 //  Created by Ilya Belenkiy on 10/31/19.
 //  Copyright © 2019 Ilya Belenkiy. All rights reserved.
 //
 
-import Foundation
 import SwiftUI
 import Combine
 
